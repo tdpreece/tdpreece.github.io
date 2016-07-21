@@ -2,7 +2,9 @@
 layout: default
 title: Tim Preece Title 
 ---
-<div class="blurb">
-  <h1>Tim Preece Content</h1>
-  <p>Test</p>
-</div><!-- /.blurb -->
+<h1>Notes on Software</h1>
+<ul class="posts">
+  {% for post in site.posts %}
+    <li><span>{{ post.date | date_to_string }}</span>  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
