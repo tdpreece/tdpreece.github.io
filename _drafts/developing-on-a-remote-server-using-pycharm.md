@@ -42,6 +42,7 @@ I then made an ssh connection with the remote server to check that it had worked
 tdpreece@precise32:~$ tree a_python_project 
 a_python_project
 `-- test
+    |-- __init__.py
     `-- test1.py
 ```
 #### Uploading changes during development
@@ -53,8 +54,9 @@ tdpreece@precise32:~$ tree a_python_project/
 a_python_project/
 |-- README.md
 `-- test
+    |-- __init__.py
     |-- test1.py
-        `-- test2.py
+    `-- test2.py
 ```
 #### Pulling in change from the origin
 I pulled in changes from origin/master (VCS > Git > Pull), which resulted in a new file, test3.py,
@@ -63,3 +65,18 @@ present.
 This was fixed by,
 Tools > Deployment > Upload to a_python_project_deployment, where 'a_python_project_deployment'.
 
+## Configure the interpreter
+File > Settings > Project > Project interpreter
+I cliked on the cog button at the end of the 'Project Interpreter' select box then clicked on 'Add remote'
+and configured the interpreter as shown below (I was using a virtualenv).
+TODO: Add picture
+When developing in Python 2.7 on CentOS 6 servers I had to add the following line to my ~/.bashrc
+```
+source scl_source enable python27
+```
+## Running the tests
+Run > Edit Configurations
+Clicked the green plus button in the top left to add a test configuration
+Entered the following details,
+TODO Add image
+Run the tests with, Run > Run 'my tests', where 'my tests' is the name I gave to my configuration.
