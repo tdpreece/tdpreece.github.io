@@ -9,11 +9,13 @@ ssh to it using my own user and without using the `vagrant ssh` command.
 
 I changed to the dir that contained the `Vagrantfile` and connected to the
 VM via ssh using vagrant's command.
+
 ```
 tdpreece@laptop$:~/vagrant/example_deployment$ vagrant ssh
 ```
 
 I then changed to my user and created the necessary ssh files.
+
 ```
 vagrant@precise32:~$ sudo su tdpreece
 tdpreece@precise32:/home/vagrant$ cd
@@ -28,6 +30,7 @@ I then copied the contents of `~/.ssh/id_rsa.pub` from my laptop to
 
 Back on my laptop I obtained the inforamtion I needed to ssh to the VM
 using my own user. 
+
 ```
 tdpreece@:~laptop/vagrant/example_deployment$ vagrant ssh-config
 Host default
@@ -43,6 +46,7 @@ Host default
 ```
 
 Then I connected to the VM via ssh using my own user,
+
 ```
 tdpreece@tdpreece-Inspiron-3542:~/vagrant/example_deployment$ ssh -p 2222 tdpreece@127.0.0.1
 
