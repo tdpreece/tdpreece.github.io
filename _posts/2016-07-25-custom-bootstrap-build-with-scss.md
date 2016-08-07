@@ -3,7 +3,6 @@ layout: post
 title: "Custom bootstrap build with SCSS"
 date: 2016-07-25
 ---
-# Custom bootstrap build with SCSS
 
 The following describes how I went about customising bootstrap using
 SCSS.

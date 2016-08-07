@@ -3,7 +3,6 @@ layout: post
 title: "Setting up Mocha JavaScript test framework"
 date: 2016-08-02
 ---
-# Setting up Mocha JavaScript test framework
 
 The following describes how I went about setting up [Mocha](https://mochajs.org/)
 for testing some simple Javascript.  I tried to do this with as few dependencies
