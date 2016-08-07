@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to ssh to a Vagrant VM"
-date: 2016-02-22
+date: 2016-07-21
 ---
 
 I had created a Vagrant VM (`config.vm.box = "precise32"`) and wanted to
