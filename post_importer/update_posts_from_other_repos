@@ -6,6 +6,7 @@ import requests
 
 github_repos = [
     {'name': 'custom_bootstrap_build_with_scss', 'published_date': '2016-07-25'},
+    {'name': 'mocha_setup', 'published_date': '2016-08-02'},
 ]
 
 
