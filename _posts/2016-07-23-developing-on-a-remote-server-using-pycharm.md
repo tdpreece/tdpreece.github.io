@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Developing on a remote server using PyCharm"
-date: 2016-02-22
+date: 2016-07-23
 ---
 
 The following explains how I set up PyCharm (2016.1.2) so that I could deploy code
