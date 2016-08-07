@@ -1,0 +1,1 @@
+./node_modules/node-sass/bin/node-sass --include-path ./bower_components/bootstrap-sass/assets/stylesheets -o ../css scss/
