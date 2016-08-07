@@ -20,10 +20,11 @@ date: {published_date}
 ---
 {body_md}
 '''
+    post_md_without_title = '\n'.join([line for line in body_md.split('\n')[1:]])
     return metadata_template.format(
         title=title,
         published_date=published_date,
-        body_md=body_md
+        body_md=post_md_without_title
     )
 
 
