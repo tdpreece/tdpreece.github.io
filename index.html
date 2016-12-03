@@ -1,10 +1,36 @@
 ---
 layout: default
-title: Tim Preece Title 
+title: Tim Preece Title
 ---
 <h1>Notes on Software</h1>
+
+<h2>Blog posts</h2>
 <ul class="posts">
   {% for post in site.posts %}
     <li><span>{{ post.date | date_to_string }}</span>  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></li>
   {% endfor %}
+</ul>
+
+<h2>On github</h2>
+<ul class="github-links">
+    <li>
+      <span>03 Dec 2016</span>
+      <a href="https://github.com/tdpreece/django_packaging">An example of a reusable Django package</a>
+    </li>
+    <li>
+      <span>05 Nov 2016</span>
+      <a href="https://github.com/tdpreece/owasp_zap_example">OWASP ZAP Example</a>
+    </li>
+    <li>
+      <span>27 Sep 2016</span>
+      <a href="https://github.com/tdpreece/webpack_example">Webpack example</a>
+    </li>
+    <li>
+      <span>02 Aug 2016</span>
+      <a href="https://github.com/tdpreece/mocha_setup">Setting up Mocha JavaScript test framework</a>
+    </li>
+    <li>
+      <span>25 Jul 2016</span>
+      <a href="https://github.com/tdpreece/custom_bootstrap_build_with_scss">Custom bootstrap build with SCSS</a>
+    </li>
 </ul>
