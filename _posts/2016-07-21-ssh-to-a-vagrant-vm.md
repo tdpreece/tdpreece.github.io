@@ -28,8 +28,8 @@ tdpreece@precise32:~$ chmod 600 .ssh/authorized_keys
 I then copied the contents of `~/.ssh/id_rsa.pub` from my laptop to 
 `~/.ssh/authorized_keys` on the VM.
 
-Back on my laptop I obtained the inforamtion I needed to ssh to the VM
-using my own user. 
+Back on my laptop I obtained the information I needed to ssh to the VM
+using my own user.
 
 ```
 tdpreece@:~laptop/vagrant/example_deployment$ vagrant ssh-config

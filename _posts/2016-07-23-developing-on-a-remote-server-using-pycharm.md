@@ -10,7 +10,6 @@ Vagrant (`config.vm.box = "precise32"`).
 
 ## Clone source code from github
 File > Settings > Version Control Github, then added my details and
-
 checked the 'Clone git repositories using ssh'.
 VCS > Checkout from version control > GitHub
 
@@ -80,7 +79,7 @@ Tools > Deployment > Upload to a_python_project_deployment, where 'a_python_proj
 
 ## Configure the interpreter
 File > Settings > Project > Project interpreter
-I cliked on the cog button at the end of the 'Project Interpreter' select box then clicked on 'Add remote'
+I clicked on the cog button at the end of the 'Project Interpreter' select box then clicked on 'Add remote'
 and configured the interpreter as shown below (I was using a virtualenv).
 ![alt text](/assets/img/pycharm-configure-remote-python-interpreter.png)
 When developing in Python 2.7 on CentOS 6 servers I had to add the following line to my ~/.bashrc
