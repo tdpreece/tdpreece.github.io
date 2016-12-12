@@ -3,6 +3,11 @@ layout: post
 title: "Virtual columns in mariadb"
 date: 2016-07-21
 ---
+
+Todo:
+* Add more detail on B-trees
+* read through
+
 The examples shown used MariaDB 10.1.19.
 
 A [virtual column](https://mariadb.com/kb/en/mariadb/virtual-computed-columns/)
