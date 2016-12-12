@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Virtual columns in mariadb"
+title: "Uses for Virtual columns in MariaDB"
 date: 2016-07-21
 ---
 
