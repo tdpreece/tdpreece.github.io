@@ -123,8 +123,8 @@ time would probably also make the the query using the virtual column more
 efficient.
 
 Another example of where select statements cannot use indexs effectively are
-queries for on the day of the week of a datetime column [1](#dayOfWeekEg1)
-[2](#dayOfWeekEg2).
+queries for on the day of the week of a datetime column [[1]](#dayOfWeekEg1)
+[[2]](#dayOfWeekEg2).
 
 ## References
 * <a name="dayOfWeekEg1">1</a>: [MariaDB 5.2: What would you use virtual columns for? - hingo](http://openlife.cc/blogs/2010/october/what-would-you-use-virtual-columns)
