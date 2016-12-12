@@ -45,34 +45,29 @@ INSERT INTO goods (price) VALUES (10), (20), (30), (40), (50), (60);
 ```
 
 If I wanted to query goods with taxed price greater than 25 I could 
-query against price or taxed_price
+query against price or taxed_price, e.g.
 
 ```sql
-SELECT * FROM goods WHERE taxed_price > 25;
-SELECT * FROM goods WHERE price > 25/(1 + 20/100);
+MariaDB [tpreece_test]> explain SELECT * FROM goods WHERE taxed_price = 24.00;                                                                  
++------+-------------+-------+------+---------------+-------------+---------+-------+------+-------+
+| id   | select_type | table | type | possible_keys | key         | key_len | ref   | rows | Extra |
++------+-------------+-------+------+---------------+-------------+---------+-------+------+-------+
+|    1 | SIMPLE      | goods | ref  | taxed_price   | taxed_price | 30      | const |    1 |       |
++------+-------------+-------+------+---------------+-------------+---------+-------+------+-------+
+1 row in set (0.00 sec)
+
+MariaDB [tpreece_test]> explain SELECT * FROM goods WHERE price = 20.00;                                                                        
++------+-------------+-------+------+---------------+-------+---------+-------+------+-------+
+| id   | select_type | table | type | possible_keys | key   | key_len | ref   | rows | Extra |
++------+-------------+-------+------+---------------+-------+---------+-------+------+-------+
+|    1 | SIMPLE      | goods | ref  | price         | price | 30      | const |    1 |       |
++------+-------------+-------+------+---------------+-------+---------+-------+------+-------+
+1 row in set (0.00 sec)
 ```
 
 As we can see, both queries use an index and both columns will have the
 same cardinality so there doesn't seem to be a
 benefit from introducing the taxed_price virtual column.
-
-```sql
-> explain SELECT * FROM goods WHERE taxed_price > 25;
-+------+-------------+-------+------+---------------+------+---------+------+------+-------------+
-| id   | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra       |
-+------+-------------+-------+------+---------------+------+---------+------+------+-------------+
-|    1 | SIMPLE      | goods | ALL  | taxed_price   | NULL | NULL    | NULL |    6 | Using where |
-+------+-------------+-------+------+---------------+------+---------+------+------+-------------+
-1 row in set (0.00 sec)
-
-> explain SELECT * FROM goods WHERE price > 25/(1 + 20/100);
-+------+-------------+-------+------+---------------+------+---------+------+------+-------------+
-| id   | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra       |
-+------+-------------+-------+------+---------------+------+---------+------+------+-------------+
-|    1 | SIMPLE      | goods | ALL  | price         | NULL | NULL    | NULL |    6 | Using where |
-+------+-------------+-------+------+---------------+------+---------+------+------+-------------+
-```
-
 
 Consider a different example in which the virtual column is a function
 two other columns.
