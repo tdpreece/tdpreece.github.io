@@ -126,5 +126,6 @@ Another example of where select statements cannot use indexs effectively are
 queries for on the day of the week of a datetime column [1](#dayOfWeekEg1)
 [2](#dayOfWeekEg2).
 
-<a name="dayOfWeekEg1">1</a>: [MariaDB 5.2: What would you use virtual columns for? - hingo](http://openlife.cc/blogs/2010/october/what-would-you-use-virtual-columns)
-<a name="dayOfWeekEg2">2</a>: [Putting Virtual Columns to good use - Anders Karlsson](https://mariadb.com/resources/blog/putting-virtual-columns-good-use)
+## References
+* <a name="dayOfWeekEg1">1</a>: [MariaDB 5.2: What would you use virtual columns for? - hingo](http://openlife.cc/blogs/2010/october/what-would-you-use-virtual-columns)
+* <a name="dayOfWeekEg2">2</a>: [Putting Virtual Columns to good use - Anders Karlsson](https://mariadb.com/resources/blog/putting-virtual-columns-good-use)
