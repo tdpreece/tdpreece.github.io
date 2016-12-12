@@ -31,7 +31,7 @@ I can then keep business logic in the code and out of the database.
 
 For example, if I create the following table (formula taken from a recent
 [webinar](https://www.percona.com/resources/technical-presentations/virtual-columns-mysql-and-mariadb-percona-mysql-webinar)
-by Federico Goncalvez on virtual columns)
+by Federico Goncalvez on virtual columns).
 
 ```sql
 CREATE TABLE `goods` (
