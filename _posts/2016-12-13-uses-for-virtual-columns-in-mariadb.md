@@ -124,8 +124,8 @@ The addition of a `PERSISTENT` virtual column may help
 boost efficiency for reads from a B-tree index where existing
 columns do not allow a `WHERE`/`JOIN ON` clause to be written in
 the form, `column=C [AND|OR another_column=C' ...]'`, where `C` and `C'`
-represent constant values (the '`=`' could be any other operator that
-the given index supports see [here](https://mariadb.com/kb/en/mariadb/storage-engine-index-types/)).
+represent constant values (the '`=`' could be any other supported operator
+see [here](https://mariadb.com/kb/en/mariadb/storage-engine-index-types/)).
 
 Another example of where select statements cannot use indexs effectively are
 queries involving the day of the week of a datetime column [[1]](#dayOfWeekEg1)
