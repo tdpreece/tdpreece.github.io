@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Uses for Virtual columns in MariaDB"
-date: 2016-07-21
+date: 2016-12-13
 ---
 
 The examples shown used MariaDB 10.1.19.
