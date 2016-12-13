@@ -16,16 +16,17 @@ which are stored in the table, and VIRTUAL, which are
 generated when the table is queried.  Indexes can only be based on
 PERSISTENT virtual columns.
 
-If I don't need to query based on a particular value I would just add
-a property/method to a class in my code to return the value.
-Thus I'm only going to be interested in PERSISTENT virtual columns,
-which can be indexed any might offer some performance benefit.
+I like to keep domain logic out of the database and only store in the
+database what is necessary.  One reason that I might me tempted to use virtual
+columns would be for performance (if this was really required).  Thus,
+I'm only interested in PERSISTENT virtual columns,
+which can be indexed and might offer some performance benefit.
 
-Usually, if I want to query on a particular calculated value I would
-adjust my query to use the columns in the database that do exist.
+If I want to query on a particular value that isn't stored in the database
+I adjust my query to use the columns in the database that do exist.
 I can then keep business logic in the code and out of the database.
 
-For example, if I create the following table (formula taken from a recent
+For example, I created the following table (formula taken from a recent
 [webinar](https://www.percona.com/resources/technical-presentations/virtual-columns-mysql-and-mariadb-percona-mysql-webinar)
 by Federico Goncalvez on virtual columns).
 
@@ -38,15 +39,11 @@ CREATE TABLE `goods` (
   KEY `price` (`price`),
   KEY `taxed_price` (`taxed_price`)
 ) ENGINE=InnoDB
-```
 
-and insert some data,
-
-```sql
 INSERT INTO goods (price) VALUES (10), (20), (30), (40), (50), (60);
 ```
 
-If I wanted to query goods with taxed price equal to 24, I could 
+and wanted to query goods with taxed price equal to 24, I could 
 query against price or taxed_price, e.g.
 
 ```sql
@@ -111,11 +108,13 @@ MariaDB [tpreece_test]> explain select id from journey where speed_in_metres_per
 1 row in set (0.00 sec)
 ```
 
-For the first query, [type = index](https://mariadb.com/kb/en/mariadb/explain/#type-column) means a
-full scan over the used index.  The B-tree index is of no use for finding values
-where the ratio of the two key parts are `8`.
+For the first query, [type = index](https://mariadb.com/kb/en/mariadb/explain/#type-column) indicates a
+full scan over the index will take place.  This is because the B-tree
+index is of no use for finding values where the ratio of the two key
+parts are `8`.
 
-For the second query [type = ref](https://mariadb.com/kb/en/mariadb/explain/#type-column) means the
+For the second query [type = ref](https://mariadb.com/kb/en/mariadb/explain/#type-column)
+indicates that the
 index is used to find the rows.  Thus, selects for `speed` will be faster using
 the virtual column.  The fact that the calculation of `speed` is done at write
 time would probably also make the the query using the virtual column more
