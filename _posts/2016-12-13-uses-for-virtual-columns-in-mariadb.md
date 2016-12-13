@@ -11,15 +11,15 @@ is a column in a table that has its value automatically calculated using
 a deterministic expression.  This expression cannot include data from
 outside the row (no subqueries) and cannot use stored functions.
 
-There are two types of virtual columns: PERSISTENT,
+There are two types of virtual columns: `PERSISTENT`,
 which are stored in the table, and VIRTUAL, which are
 generated when the table is queried.  Indexes can only be based on
-PERSISTENT virtual columns.
+`PERSISTENT` virtual columns.
 
 I like to keep domain logic out of the database and only store in the
 database what is necessary.  One reason that I might me tempted to use virtual
 columns would be for performance (if this was really required).  Thus,
-I'm only interested in PERSISTENT virtual columns,
+I'm only interested in `PERSISTENT` virtual columns,
 which can be indexed and might offer some performance benefit.
 
 If I want to query on a particular value that isn't stored in the database
@@ -120,7 +120,7 @@ the virtual column.  The fact that the calculation of `speed` is done at write
 time would probably also make the query using the virtual column more
 efficient.
 
-The addition of a PERSISTENT virtual may help
+The addition of a `PERSISTENT` virtual column may help
 boost efficiency for reads from a B-tree index where existing
 columns do not allow a `WHERE`/`JOIN ON` clause to be written in
 the form, `column=C [AND|OR another_column=C' ...]'`, where `C` and `C'`
