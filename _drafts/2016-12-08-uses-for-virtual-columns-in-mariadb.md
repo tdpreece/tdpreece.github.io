@@ -4,9 +4,6 @@ title: "Uses for Virtual columns in MariaDB"
 date: 2016-07-21
 ---
 
-Todo:
-* R-tree 
-
 The examples shown used MariaDB 10.1.19.
 
 A [virtual column](https://mariadb.com/kb/en/mariadb/virtual-computed-columns/)
