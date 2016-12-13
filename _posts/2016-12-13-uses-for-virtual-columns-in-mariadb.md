@@ -120,9 +120,9 @@ the virtual column.  The fact that the calculation of `speed` is done at write
 time would probably also make the query using the virtual column more
 efficient.
 
-Virtual columns may help
-boost efficiency for reads from a B-tree index
-for any `WHERE`/`JOIN ON` clause that can be written in
+The addition of a PERSISTENT virtual may help
+boost efficiency for reads from a B-tree index where existing
+columns do not allow a `WHERE`/`JOIN ON` clause to be written in
 the form, `column=C [AND|OR another_column=C' ...]'`, where `C` and `C'`
 represent constant values (the '`=`' could be any other operator that
 the given index supports see [here](https://mariadb.com/kb/en/mariadb/storage-engine-index-types/)).
