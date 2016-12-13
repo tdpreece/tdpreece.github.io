@@ -117,7 +117,7 @@ For the second query [type = ref](https://mariadb.com/kb/en/mariadb/explain/#typ
 indicates that the
 index is used to find the rows.  Thus, selects for `speed` will be faster using
 the virtual column.  The fact that the calculation of `speed` is done at write
-time would probably also make the the query using the virtual column more
+time would probably also make the query using the virtual column more
 efficient.
 
 Virtual columns may help
