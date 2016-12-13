@@ -5,8 +5,7 @@ date: 2016-07-21
 ---
 
 Todo:
-* Add more detail on B-trees
-* read through
+* R-tree 
 
 The examples shown used MariaDB 10.1.19.
 
@@ -18,7 +17,7 @@ outside the row (no subqueries) and cannot use stored functions.
 There are two types of virtual columns: PERSISTENT,
 which are stored in the table, and VIRTUAL, which are
 generated when the table is queried.  Indexes can only be based on
-PERSISTENT virtual columns
+PERSISTENT virtual columns.
 
 If I don't need to query based on a particular value I would just add
 a property/method to a class in my code to return the value.
@@ -50,7 +49,7 @@ and insert some data,
 INSERT INTO goods (price) VALUES (10), (20), (30), (40), (50), (60);
 ```
 
-If I wanted to query goods with taxed price greater than 25 I could 
+If I wanted to query goods with taxed price equal to 24, I could 
 query against price or taxed_price, e.g.
 
 ```sql
@@ -72,11 +71,12 @@ MariaDB [tpreece_test]> explain SELECT * FROM goods WHERE price = 20.00;
 ```
 
 As we can see, both queries use an index and both columns will have the
-same cardinality so there doesn't seem to be a
+same cardinality (each value of `price` corresponds to exactly one value
+of `taxed_price`) so there doesn't seem to be any performance
 benefit from introducing the taxed_price virtual column.
 
 Consider a different example in which the virtual column is a function
-two other columns.
+of two other columns.
 
 ```sql
 CREATE TABLE journey (
@@ -93,8 +93,8 @@ INSERT INTO journey (distance_in_metres, time_in_seconds)
 VALUES (4,1), (8,2), (16, 4), (16, 3), (16, 2);
 ```
 
-Both the a query on speed and a query on distance/time use indexes.
-Would the speed of the query be different?
+Let's say that I wanted to find the rows with `speed = 8m/s`.
+This can be done using either of the queries explained below.
 
 ```sql
 MariaDB [tpreece_test]> explain select id from journey where distance_in_metres/time_in_seconds = 8;
@@ -114,17 +114,25 @@ MariaDB [tpreece_test]> explain select id from journey where speed_in_metres_per
 1 row in set (0.00 sec)
 ```
 
-For the first query type=[index](https://mariadb.com/kb/en/mariadb/explain/#type-column) means a
+For the first query, [type = index](https://mariadb.com/kb/en/mariadb/explain/#type-column) means a
 full scan over the used index.  The B-tree index is of no use for finding values
-where the ratio of the two key parts are 8.
-For the second query type=[ref](https://mariadb.com/kb/en/mariadb/explain/#type-column) means the
-index is used to find the rows.  Thus, selects for speed will be faster using
-the virtual column.  The fact that the calculation of speed is done at write
+where the ratio of the two key parts are `8`.
+
+For the second query [type = ref](https://mariadb.com/kb/en/mariadb/explain/#type-column) means the
+index is used to find the rows.  Thus, selects for `speed` will be faster using
+the virtual column.  The fact that the calculation of `speed` is done at write
 time would probably also make the the query using the virtual column more
 efficient.
 
+Virtual columns may help
+boost efficiency for reads from a B-tree index
+for any `WHERE`/`JOIN ON` clause that can be written in
+the form, `column=C [AND|OR another_column=C' ...]'`, where `C` and `C'`
+represent constant values (the '`=`' could be any other operator that
+the given index supports see [here](https://mariadb.com/kb/en/mariadb/storage-engine-index-types/)).
+
 Another example of where select statements cannot use indexs effectively are
-queries for on the day of the week of a datetime column [[1]](#dayOfWeekEg1)
+queries involving the day of the week of a datetime column [[1]](#dayOfWeekEg1)
 [[2]](#dayOfWeekEg2).
 
 ## References
