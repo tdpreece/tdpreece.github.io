@@ -5,6 +5,7 @@ date: 2016-12-14
 ---
 
 Todo:
+
 * install memcached
 * Add image of how memcache uses memory (pages, slabs, chunks)
 * example with autoallocatin turned off and getting into a bad state
