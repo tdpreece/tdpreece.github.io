@@ -1,0 +1,630 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Characterisation testing</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- My styles -->
+    <style>
+      .footer {
+        position:absolute;
+        width: 15%;
+        bottom: 3%;
+        left: 3%;
+      }
+      .slides h1, .slides h2, .slides h3, .slides h4 {
+        text-transform: none;
+      }
+      .reveal pre code {
+        font-size: 20px;
+        line-height: 1.2;
+      }
+      img.presentation-image {
+        max-height: 500px;
+      }
+      h3.meld-diff-heading {
+        background-color: #3f3f3f;
+        color: #ffffff;
+      }
+      p.author-name {
+      }
+      p.presentation-url {
+        vertical-align: bottom;
+      }
+    </style>
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+          <div>
+            <h2>Characterisation Testing in&nbsp;Python</h2>
+          </div>
+          <div>
+            <p class="author-name">Tim Preece (@tdpreece)</p>
+            <p class="presentation-url"><a href="https://tdpreece.github.io/characterisation_testing_in_python/">https://tdpreece.github.io/characterisation-testing-in-python/</a><p>
+          </div>
+        </section>
+        <section>
+          <ol>
+            <li>Introduce Characterisation Tests</li>
+            <li>Refactoring example</li>
+            <ul>
+              <li>Tooling</li>
+            </ul>
+            <li>Bug fix example</li>
+            <li>Indirect inputs/outputs</li>
+          </ol>
+        </section>
+        <section>
+          <section>
+            <h3>Characterisation tests</h3>
+            <p>The term was coined by Michael Feathers.</p>
+            <img class="presentation-image" src="https://www.pearsonhighered.com/assets/bigcovers/0/1/3/1/0131177052.jpg">
+            <aside class="notes">
+              <p>Characterisation tests and other techniques discussed in his book.</p>
+            </aside>
+          </section>
+          <section>
+            <p>Characterisation tests document what the code does.<p>
+            <aside class="notes">
+              <p>We don't gather requirements.  The code is the spec.</p>
+              <p>This property means that characterisation tests can be very quick to write.  We're just recording behaviour.</p>
+              <p>This is only useful when we know the code is behaving correctly.</p>
+              <p>Legacy code may come without tests but it's been in use for a long time and the business is happy that the behaviour is correct.</p>
+              <p>Thus, characterisation testing is a useful tool for working with legacy code.</p>
+            </aside>
+          </section>
+          <section>
+            <p>Characterisation tests guard against changes to behaviour.</p>
+            <aside class="notes">
+              <p>This is obviously useful when refactoring legacy code.</p>
+              <p>By definition, when refactoring we don't want to change the behaviour.</p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Refactoring Example</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/repayment_calculator.py#43-57'></code></pre>
+            <aside class="notes">
+              <p>This is some legacy code that has been running for some time in production.</p>
+              <p>Everyone is happy with it except for the fact it's a little slow.</p>
+              <p>Notice that this loop is a sum of a geometric series.</p>
+              <p>We can use the formula so we only need to call 'pow' once.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>The change</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/repayment_calculator_refactored.py#9-27'></code></pre>
+            <aside class="notes">
+              <p>There are currently no tests for this code.</p>
+              <p>There should be no change in behaviour with the refactoring, but we want to be sure.</p>
+              <p>This is perfect for characterisation tests.</p>
+              <p>Lets write our first characterisation test.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>First test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/test_characterization_by_hand_before_recording_results.py#9-15'></code></pre>
+            <pre><code data-trim data-noescape>
+                AssertionError: Decimal('367.20') != '???'
+
+                ---------------------------------------------
+
+                FAILED
+            </code></pre>
+            <aside class="notes">
+              <p>Write a test, don't know what the output is, but don't need to know.</p>
+              <p>We're happy with current behaviour and just want to guard against change.</p>
+              <p>Test fails when we run it.</p>
+              <p>Can see the actual output for the function from the assertion.</p>
+              <p>Get test to pass by copying in expected value.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Rerun test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/test_characterization_by_hand_after_recording_results.py#9-15'></code></pre>
+            <pre><code data-trim data-noescape>
+
+                ---------------------------------------------
+
+                OK
+            </code></pre>
+            <aside class="notes">
+              <p>After copying the expected value into place, we run test again and it passes.</p>
+              <p>We have out first characterisation test.</p>
+              <p>How many characterizations tests do we need?</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Minimum of 100% branch coverage</h3>
+            <img src="img/repayment_calculator_with_coverage.png">
+            <aside class="notes">
+              <p>We need another test to get 100% branch coverage.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Add another test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/test_characterization_by_hand_before_recording_results.py#17-21'></code></pre>
+            <pre><code data-trim data-noescape>
+                Exception: Invalid input!
+
+                ---------------------------------------------
+
+                FAILED
+            </code></pre>
+            <aside class="notes">
+              <p>Add a test that will take us through the uncovered branch.</p>
+              <p>We need to change our characterization test to assert that an exception is raised.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Re-run test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/test_characterization_by_hand_after_recording_results.py#17-22'></code></pre>
+            <pre><code data-trim data-noescape>
+
+                ---------------------------------------------
+
+                OK
+            </code></pre>
+            <aside class="notes">
+              <p>Change test to assert exception is raised.</p>
+              <p>Run test again and it passes.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Safety net good enough?</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/repayment_calculator_refactored.py#9-26'></code></pre>
+            <aside class="notes">
+              <p>Who's comfortable doing this amount of refactoring under our current suite of 2 tests?</p>
+              <p>Coverage isn't everything.</p>
+              <p>We want to cover paths close to the boundaries of decisions.</p>
+              <p>This could be in our function in dependencies of our function.</p>
+              <p>We also want to know about any rounding problems that my occur.</p>
+              <p>Thus, we want a large number of samples of a large input parameter space.</p>
+              <p>We need a lot more tests and we want to be able to add them quickly.</p>
+              <p>A package that can help us to write tests quickly is 'approvaltests'.</p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>
+              <code>pip install approvaltests</code>
+            </h3>
+            <ul>
+              <li>Create tests quickly</li>
+              <li>Granular view of failures</li>
+            </ul>
+          </section>
+          <section>
+            <h3>verify</h3>
+            <pre><code data-sample='python_code_examples/approvaltests_example/test.py'></code></pre>
+            <aside class="notes">
+              <p>approvaltests uses verify to make assertions.</p>
+              <p>verify compares the recieved_string to an approved value stored in a file on disk.</p>
+              <p>Well ... actually it writes the received string to a file and compares this file to the approved file</p>
+              <p>By default the approved file is stored in the same dir as the test and its name is defined by the test.</p>
+              <p>If the received_string differs from the approved value the reporter (meld) will display the differences.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>approved outputs</h3>
+            <pre><code>
+            approvaltests_example
+            ├── TestFormat.test_format.approved.txt
+            └── test.py
+            </code></pre>
+          </section>
+          <section>
+            <p>Contents of TestFormat.test_format.approved.txt</p>
+            <pre><code>
+            Hello World!
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Refactoring example continued</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/repayment_calculator_refactored.py#9-26'></code></pre>
+            <aside class="notes">
+              <p>Let's remind ourselves of our objective.</p>
+              <p>We want to change this piece of code for performance benefits.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Start using verify</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/test_with_approvaltests.py#10-17'></code></pre>
+            <aside class="notes">
+              <p>I alter my initial characterization test to use verify.</p>
+              <p>I'm now going to run the test.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/simple_approval_first_run.png">
+            <h3 class="meld-diff-heading">Diff with empty approved file</h3>
+            <aside class="notes">
+              <p>There's no saved 'approved' file on the first run so approvaltests creates an empty file with the correct name.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/simple_approval_save.png">
+            <h3 class="meld-diff-heading">update approved file and save</h3>
+            <aside class="notes">
+              <p>We want to record the current behaviour so copy the received value to the approved file and save.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Ignore first failure</h3>
+            <pre><code data-trim data-noescape>
+                ApprovalException: 'Approval Mismatch'
+
+                ---------------------------------------------
+
+                FAILED
+            </code></pre>
+            <aside class="notes">
+              <p>The test failed because 'verify' was comparing the received value to a blank file.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Check test passes</h3>
+            <pre><code data-trim data-noescape>
+
+                ---------------------------------------------
+
+                OK
+            </code></pre>
+            <aside class="notes">
+              <p>Run test again and it passes.</p>
+              <p>Notice that we only see the reporter if the test fails.</p>
+              <p>This makes writing characterisation tests a little quicker but we need many more before we feel comfortable refactoring.</p>
+            </aside>
+          </section>
+          <section>
+            <h3><code>verify_all_combinations</code></h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/test_with_approvaltests.py#19-28'></code></pre>
+            <aside class="notes">
+              <p>'verify_all_combinations' runs the function under tests against every combination of inputs (the outer product of inputs).</p>
+              <p>Each input and it's associated output are written to a file then compared to an approved file.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/refactoring_example/combinations_approval_first_run.png">
+            <h3 class="meld-diff-heading">Diff with empty approved file</h3>
+            <aside class="notes">
+              <p>First run, so approved file is empty.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/refactoring_example/combinations_approval_save.png">
+            <h3 class="meld-diff-heading">Update approved file & save</h3>
+            <aside class="notes">
+              <p>We want to record current behaviour so we copy the contents of the received file to the approved file and save.</p>
+            </aside>
+          </section>
+          <section>
+            <pre><code data-trim data-noescape>
+                ApprovalException: 'Approval Mismatch'
+
+                ---------------------------------------------
+
+                FAILED
+            </code></pre>
+            <aside class="notes">
+              <p>Approved file was empty, received file was not so test failed.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Check test passes</h3>
+            <pre><code data-trim data-noescape>
+
+                ---------------------------------------------
+
+                OK
+            </code></pre>
+            <aside class="notes">
+              <p>Run the test again.</p>
+              <p>Received file matches approved file so test passes.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Mistake while refactoring</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/repayment_calculator_broken.py#43-57'></code></pre>
+            <aside class="notes">
+              <p>I break the code by adding 1 to the duration_in_weeks in 'pow'.</p>
+              <p>We'll be able to see a detailed view of what's broken when we run the tests.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/refactoring_example/combinations_approval_mismatch.png">
+            <aside class="notes">
+              <p>We DO NOT save, close meld.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Test failed</h3>
+            <pre><code data-trim data-noescape>
+                ApprovalException: 'Approval Mismatch'
+
+                ---------------------------------------------
+
+                FAILED
+            </code></pre>
+            <aside class="notes">
+              <p>Test failed because received file didn't match approved file.</p>
+              <p>I now go back and fix my mistake.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/refactoring_example/combinations_approval_first_run.png">
+            <h3 class="meld-diff-heading">Bugs</h3>
+            <aside class="notes">
+              <p>Did you notice the bug when looking at the outputs in meld?</p>
+              <p>As we're writing characterisation tests, we're recording what the code does, not what it should do.</p>
+              <p>You may want to fix the bug before your the changes you're working on or after.</p>
+              <p>You will need to find out what implications your 'fix' has though.</p>
+              <p>Code that uses this function may be applying a correction itself so the end result for the user would be the same.</p>
+              <p>Should these characterisation tests be committed?  It depends.</p>
+              <p>You could commit them.  Though as you change the behaviour of your code the characterisation tests become less relevant and would eventually be removed, which we'll see shortly.</p>
+              <p>If you were refactoring to gain insight to a function before extending its behaviour, you may decide to add some meaningful tests to replace the recorded characterisation tests once you figure the behaviour out.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Tips</h3>
+            <ul>
+              <li>Look for interesting inputs</li>
+              <li>Run your tests regularly</li>
+             </ul>
+             <aside class="notes">
+              <p>You can look for interesting inputs in the code.</p>
+              <p>Run tests regularly for quick feedback means you should't spend time debugging.</p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Reasons for change</h3>
+            <ul>
+              <li>Adding a feature</li>
+              <li>Fixing a bug</li>
+              <li>Refactoring
+                <ul>
+                  <li>Improving the design</li>
+                  <li>Performance</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h3>What changes?</h3>
+            <table>
+              <thead>
+                <tr>
+                  <td></td>
+                  <td>Structure</td>
+                  <td>Functionality</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Refactoring</td>
+                  <td align="center">&#10003;</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Feature</td>
+                  <td align="center">&#10003;</td>
+                  <td align="center">&#10003;</td>
+                </tr>
+                <tr>
+                  <td>Bug</td>
+                  <td align="center">&#10003;</td>
+                  <td align="center">&#10003;</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section>
+            <h3>How much changes?</h3>
+            <table>
+              <thead>
+              <tr>
+                <td></td>
+                <td colspan="2">Functionality</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Constant</td>
+                <td>Changes</td>
+              </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Refactoring</td>
+                  <td align="center">100%</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Feature</td>
+                  <td align="center">95%</td>
+                  <td align="center">5%</td>
+                </tr>
+                <tr>
+                  <td>Bug</td>
+                  <td align="center">95%</td>
+                  <td align="center">5%</td>
+                </tr>
+              </tbody>
+            </table>
+            <aside class="notes">
+              <p>The percentages aren't accurate - they're just being used to make a point.</p>
+              <p>Usually, we'll be making small iterative changes to code.</p>
+              <p>The fact that a much of the behaviour stays the same can help us.</p>
+              <p>Characterisation tests could be used to make sure that the 95% retains it's current behaviour</p>
+              <p>let's take a look at the bug that I mentioned.</p>
+            </aside>
+          </section>
+        </section>
+				<section>
+          <section data-background-image="img/refactoring_example/combinations_approval_save.png">
+            <h3 class="meld-diff-heading">Bug fix example</h3>
+            <aside class="notes">
+              <p>We can see from the approved file that we get odd behaviour for interest rates less than zero.</p>
+              <p>This is beyond the range the the model works for.</p>
+              <p>Also, for 0 interest we get an exception that isn't very useful.</p>
+              <p>Thus, we should raise an exception for these values.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Write a characterization test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/bug_fix/before/test_repayment_calculator.py#10-22'></code></pre>
+            <aside class="notes">
+              <p>This is the same as the characterisation test we wrote before but with one exception ...</p>
+              <p>This time we don't include input parameters that will change, i.e. negative interest rates.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/bug_fix_example/meld-diff-first-run.png">
+            <aside class="notes">
+              <p>Run the test.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/bug_fix_example/meld-diff-save.png">
+            <aside class="notes">
+              <p>Save the diff.</p>
+              <p>Run test again to make sure it passes.</p>
+              <p>Now we're guarding against accidental change to behaviour we want to keep we can look at fixing the bug.</p>
+              <p>We're going to use Test-driven development (TDD) to fix the bug.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Write test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/bug_fix/step_1/test_repayment_calculator.py#24-32'></code></pre>
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <h3>Write code to pass test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/bug_fix/step_1/repayment_calculator.py#9-24'></code></pre>
+          </section>
+          <section>
+            <h3>Write another test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/bug_fix/step_2/test_repayment_calculator.py#33-39'></code></pre>
+          </section>
+          <section>
+            <h3>Write code to pass test</h3>
+            <pre><code data-sample='python_code_examples/repayment_calculator/bug_fix/step_2/repayment_calculator.py#9-24'></code></pre>
+          </section>
+          <section>
+            <h3>Run tests</h3>
+            <pre><code data-trim data-noescape>
+
+                ---------------------------------------------
+
+                OK
+            </code></pre>
+            <aside class="notes">
+              <p>The bug is now fixed.</p>
+              <p>As mentioned earlier, the scope of the characterisation tests has been reduced.</p>
+              <p>You can probably imagine how characterisation tests would be slowly removed as you work on a legacy system.</p>
+              <p>Next, we're going to look at something a little more realistic: indirect inputs and outputs</p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Functions with indirect outputs</h3>
+            <pre><code data-sample='python_code_examples/credit_check_indirect_output_example/credit_check.py#8-20'></code></pre>
+            <aside class="notes">
+              <p>A direct output is what is returned at the end of a function.</p>
+              <p>The indirect output here is the parameters to the 'get' request.</p>
+              <p>If we were refactoring this function we'd want to make sure that in addition the the output (return value) not changing we'd want to make sure that the indirect output doesn't change either.</p>
+              <p>How do the record this indirect output during a test?  mock library.</p>
+              <p>Very lucky in Python that you can dynamically mock out functions.</p>
+              <p>In other languages this can be a ver difficult and time consuming process.</p>
+              <p>Let's get this function under test.</p>
+            </aside>
+          </section>
+          <section>
+            <h3>Add Tests</h3>
+            <pre><code data-sample='python_code_examples/credit_check_indirect_output_example/test_credit_check.py#10-33'></code></pre>
+            <aside class="notes">
+              <p>We're going to use approvaltests.verfy_all_combinations again.</p>
+              <p>Because I want to re-patch requests for each input argument we test, I extract a function to take care of this.</p>
+            </aside>
+          </section>
+          <section data-background-image="img/indirect_output_example/approval_first_run.png">
+            <h3 class="meld-diff-heading">Record approved file</h3>
+            <aside class="notes">
+              <p>The approved file is empty on the first run.</p>
+              <p>We record the outputs and carry on in the same way as for the other examples</p>
+              <p>Indirect inputs to a function can be handled in much the same way.</p>
+            </aside>
+          </section>
+        </section>
+        <section>
+          <h3>Characterisation tests:</h3>
+          <ul>
+            <li>can be used when code can be considered correct</li>
+            <li>guard against changes</li>
+            <li>very quick to write</li>
+            <li>useful for refactoring, bugs or features</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Questions</h3>
+        </section>
+      </div>
+      <div class="footer">
+        <img src="img/iwoca-logo.png">
+      </div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+//        width: "100%",
+//        height: "100%",
+        width: 1300,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        // Bounds for smallest/largest possible scale to apply to content
+        minScale: 0.2,
+        maxScale: 1.5,
+
+        center: true,
+
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+//        Downloaded sampler from https://github.com/ldionne/reveal-sampler
+          { src: 'plugin/sampler.js' }
+				]
+			});
+		</script>
+	</body>
+</html>
