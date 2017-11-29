@@ -2,7 +2,7 @@
 
 # Viewing the presentation
 
-* run a http server in teh reveal.js directory (e.g. `python -m SimpleHTTPServer 8000`)
+* run a http server in this directory (e.g. `python -m SimpleHTTPServer 8000`)
 * Open your browser and go to the host:port that the http server is running on (e.g. http://localhost:8000)
   file in a browser.
 * To View presentation with speaker notes use the query arg `?showNotes=true` (e.g.
