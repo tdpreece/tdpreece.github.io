@@ -372,7 +372,6 @@
           <section data-background-image="img/refactoring_example/combinations_approval_first_run.png">
             <h3 class="meld-diff-heading">Bugs</h3>
             <aside class="notes">
-              <p>Did you notice the bug when looking at the outputs in meld?</p>
               <p>As we're writing characterisation tests, we're recording what the code does, not what it should do.</p>
               <p>You may want to fix the bug before your the changes you're working on or after.</p>
               <p>You will need to find out what implications your 'fix' has though.</p>
@@ -380,6 +379,8 @@
               <p>Should these characterisation tests be committed?  It depends.</p>
               <p>You could commit them.  Though as you change the behaviour of your code the characterisation tests become less relevant and would eventually be removed, which we'll see shortly.</p>
               <p>If you were refactoring to gain insight to a function before extending its behaviour, you may decide to add some meaningful tests to replace the recorded characterisation tests once you figure the behaviour out.</p>
+              <p>We have a bug here.  For an interest rate of zero we get an exception.</p>
+              <p>We could support this but loans of 0 or negative interest rates are bad for business so let's raise a more informative exception for these invalid values of interest rate.</p>
             </aside>
           </section>
           <section>
@@ -390,7 +391,7 @@
              </ul>
              <aside class="notes">
               <p>You can look for interesting inputs in the code.</p>
-              <p>Run tests regularly for quick feedback means you should't spend time debugging.</p>
+              <p>Run tests regularly for quick feedback means you shouldn't spend time debugging.</p>
             </aside>
           </section>
         </section>
@@ -482,10 +483,7 @@
           <section data-background-image="img/refactoring_example/combinations_approval_save.png">
             <h3 class="meld-diff-heading">Bug fix example</h3>
             <aside class="notes">
-              <p>We can see from the approved file that we get odd behaviour for interest rates less than zero.</p>
-              <p>This is beyond the range the the model works for.</p>
-              <p>Also, for 0 interest we get an exception that isn't very useful.</p>
-              <p>Thus, we should raise an exception for these values.</p>
+              <p>We want to raise an informative exception when an invalid interest rate for the loan is given.</p>
             </aside>
           </section>
           <section>
@@ -550,10 +548,10 @@
             <aside class="notes">
               <p>A direct output is what is returned at the end of a function.</p>
               <p>The indirect output here is the parameters to the 'get' request.</p>
-              <p>If we were refactoring this function we'd want to make sure that in addition the the output (return value) not changing we'd want to make sure that the indirect output doesn't change either.</p>
+              <p>If we were refactoring this function we'd want to make sure that in addition the output (return value) not changing we'd want to make sure that the indirect output doesn't change either.</p>
               <p>How do the record this indirect output during a test?  mock library.</p>
               <p>Very lucky in Python that you can dynamically mock out functions.</p>
-              <p>In other languages this can be a ver difficult and time consuming process.</p>
+              <p>In other languages this can be a very difficult and time consuming process.</p>
               <p>Let's get this function under test.</p>
             </aside>
           </section>
