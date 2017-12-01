@@ -199,7 +199,7 @@
               <p>We want to cover paths close to the boundaries of decisions.</p>
               <p>This could be in our function in dependencies of our function.</p>
               <p>We also want to know about any rounding problems that my occur.</p>
-              <p>Thus, we want a large number of samples of a large input parameter space.</p>
+              <p>Thus, we want to test against a large number of input combinations.</p>
               <p>We need a lot more tests and we want to be able to add them quickly.</p>
               <p>A package that can help us to write tests quickly is 'approvaltests'.</p>
             </aside>
@@ -223,7 +223,7 @@
               <p>verify compares the recieved_string to an approved value stored in a file on disk.</p>
               <p>Well ... actually it writes the received string to a file and compares this file to the approved file</p>
               <p>By default the approved file is stored in the same dir as the test and its name is defined by the test.</p>
-              <p>If the received_string differs from the approved value the reporter (meld) will display the differences.</p>
+              <p>If the received_string differs from the approved value the reporter (meld in this case) will display the differences.</p>
             </aside>
           </section>
           <section>
@@ -301,7 +301,7 @@
             <h3><code>verify_all_combinations</code></h3>
             <pre><code data-sample='python_code_examples/repayment_calculator/refactoring_example/test_with_approvaltests.py#19-28'></code></pre>
             <aside class="notes">
-              <p>'verify_all_combinations' runs the function under tests against every combination of inputs (the outer product of inputs).</p>
+              <p>'verify_all_combinations' runs the function under tests against every combination of inputs.</p>
               <p>Each input and it's associated output are written to a file then compared to an approved file.</p>
             </aside>
           </section>
@@ -380,7 +380,6 @@
               <p>You could commit them.  Though as you change the behaviour of your code the characterisation tests become less relevant and would eventually be removed, which we'll see shortly.</p>
               <p>If you were refactoring to gain insight to a function before extending its behaviour, you may decide to add some meaningful tests to replace the recorded characterisation tests once you figure the behaviour out.</p>
               <p>We have a bug here.  For an interest rate of zero we get an exception.</p>
-              <p>We could support this but loans of 0 or negative interest rates are bad for business so let's raise a more informative exception for these invalid values of interest rate.</p>
             </aside>
           </section>
           <section>
@@ -483,6 +482,7 @@
           <section data-background-image="img/refactoring_example/combinations_approval_save.png">
             <h3 class="meld-diff-heading">Bug fix example</h3>
             <aside class="notes">
+              <p>We could support 0 interest rates but loans of 0 or negative interest rates are bad for business so let's raise a more informative exception for these invalid values of interest rate.</p>
               <p>We want to raise an informative exception when an invalid interest rate for the loan is given.</p>
             </aside>
           </section>
